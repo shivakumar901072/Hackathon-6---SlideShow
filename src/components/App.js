@@ -1,66 +1,40 @@
 import React, { Component, useState } from "react";
-import '../styles/App.css';
-import Data from '../data.js';
-import Slides from './Slides.js';
+import "../styles/App.css";
 
 const App = (props) => {
-  const [title, setTitle] = useState(props.slides[0]["title"]);
-  const [text, setText] = useState(props.slides[0]["text"]);
-  const [count, setCount] = useState(0);
-  const [disableNext, setDesableNext] = useState(false);
-  const [disableprev, setDesableprev] = useState(true);
-  const [disableStart, setDesableStart]=useState(true);
+  const [index, setIndex] = useState(0);
 
-  const handleRestart = () => {
-    setTitle(props.slides[0]["title"]);
-    setText(props.slides[0]["text"]);
-    setDesableNext(false);
-    setDesableprev(true);
-    setDesableStart(true);
-  }
-  const handlePrev = () => {
-    
-    setDesableNext(false);
-    let slideIndx = count - 1;
-    if (slideIndx >= 0) {
-      setTitle(props.slides[slideIndx]["title"]);
-      setText(props.slides[slideIndx]["text"]);
-      setCount(slideIndx);
-    }
-    if(count===1){
-      setDesableprev(true);
-      setDesableStart(true);//update
-    }
-
-  }
-
-  const handleNext = () => {
-    setDesableprev(false);
-    setDesableStart(false);
-    let slideIndx = count + 1;
-    if (slideIndx < props.slides.length) {
-      setTitle(props.slides[slideIndx]["title"]);
-      setText(props.slides[slideIndx]["text"]);
-      setCount(slideIndx);
-    }
-    if (slideIndx === props.slides.length - 1) {
-      setDesableNext(true);
-    }
-
-  }
   return (
-    <>
-      <Slides title={title} text={text}
-        disableNext={disableNext}
-        disablePrev={disableprev}
-        disableStart={disableStart}
-        handleRestart={handleRestart}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
-    </>
-  )
-}
-
+    <div>
+      <h1 data-testid="title">{props.slides[index].title}</h1>
+      <p data-testid="text">{props.slides[index].text}</p>
+      <button
+        data-testid="button-restart"
+        disabled={index === 0}
+        onClick={() => setIndex(0)}
+      >
+        Restart
+      </button>
+      <button
+        data-testid="button-prev"
+        disabled={index === 0}
+        onClick={() => {
+          if (index > 0) setIndex(index - 1);
+        }}
+      >
+        Prev
+      </button>
+      <button
+        data-testid="button-next"
+        disabled={index === props.slides.length - 1}
+        onClick={() => {
+          if (index < props.slides.length - 1) setIndex(index + 1);
+        }}
+      >
+        Next
+      </button>
+    </div>
+  );
+};
 
 export default App;
